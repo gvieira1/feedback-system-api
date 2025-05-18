@@ -1,0 +1,170 @@
+{
+	"info": {
+		"_postman_id": "6f672f77-0a37-49f1-8962-aad28ac348de",
+		"name": "feedback",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39990146"
+	},
+	"item": [
+		{
+			"name": "Register admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \t\"username\": \"testuser\",\r\n\t\"email\": \"testuser@email.com\",\r\n\t\"password\": \"ifsp@123\",\r\n\t\"passwordConfirmation\": \"ifsp@123\",\r\n\t\"role\": \"ADMIN\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users Admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHkiLCJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc0NzQ0MDk1OSwiaWF0IjoxNzQ3NDM3MzU5LCJ1c2VySWQiOjF9.o7CQIE6aj0437Z9QMQaIs8prvgf098NbqMG-MeontxRGSou_sefnO-qduciz8VWRb8DrZP_vUNRSr9-SJ2hizK6jLdZn1FZqCuXE_d4iBe0-gUsqR5cS7orpFX5Jt0NaFmJ0H5u_5cU4zHjstgw_bYCgPyFpITsP8bTNSfbyxFdnfyh5ZutEElJ_d4i1PM9i5CvK9MxGBZEE09-gjrZrtzRnk3PL9s6f8W4CsEaWSGY8ttz_lu51P69BCiaNPtxykOdGl4Eo7pEF216C5LvRyXFf3RBv8TgHFnZIrZ8EJmmodwlUoaQd9ofabbMzyAvb-zzJEa5uKz5wLjYddpjTkw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"employeetest\",\r\n    \"password\": \"ifsp@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/authenticate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get feedback by user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHkiLCJzdWIiOiJlbXBsb3llZXRlc3QiLCJleHAiOjE3NDc0NDEyMDEsImlhdCI6MTc0NzQzNzYwMSwidXNlcklkIjoxfQ.VtwbwObKczUK1OKrb6sh5CR0DSFAIbclEp7d710jLSTuf7pcLBdLaMI3VYBIOwlV_0DZDyvZPxFOXaENuruSaWbDzmxoI32SJ--_H5CLsKFq0pJvwP0KbmRyNgqhWvxhuInwO1xGBsllCQGvz4iniaIJwlfhCd7FO4TWlQJRfR8pVOv2Hm8CoRWzvuoN8vtoVLrGS-jNJK5Jn7ELqv_ZYgm5ejCQCdLadFEGAVBsJkgYL-DU-vtu3FHNzS28KnVs8zXRUZZwDSWrYo8gLfdVkR8XsLAgD_htjO13jRj7tkpA2Lb0saO7md8sn1Q0SiqU90VnTkT0uw5FBSfxrW-g9A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/feedback",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"feedback"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register employee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \t\"username\": \"employeetest\",\r\n\t\"email\": \"testemployee@email.com\",\r\n\t\"password\": \"ifsp@123\",\r\n\t\"passwordConfirmation\": \"ifsp@123\",\r\n\t\"role\": \"EMPLOYEE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
