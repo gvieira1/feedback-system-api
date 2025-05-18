@@ -1,5 +1,7 @@
 package br.ifsp.edu.feedback.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ public class FeedbackService {
 	
 	private final FeedbackRepository feedbackRepository;
 	
-	public List<Feedback> getFeedbacksByUser(User user) {
+	public List<Feedback> getMyFeedbacks(User user) {
 		return feedbackRepository.findByAuthor(user);
 	}
 	
@@ -47,5 +49,17 @@ public class FeedbackService {
 	            .tags(feedback.getTags())
 	            .authorName(feedback.isAnonymous() ? null : feedback.getAuthor().getUsername())
 	            .build();
+	}
+	
+	public List<Feedback> filterFeedbacks(String setor, LocalDate data) {
+	    if (setor != null && data != null) {
+	        return feedbackRepository.findBySectorAndCreatedAtBetween(setor, data.atStartOfDay(), data.atTime(LocalTime.MAX));
+	    } else if (setor != null) {
+	        return feedbackRepository.findBySector(setor);
+	    } else if (data != null) {
+	        return feedbackRepository.findByCreatedAtBetween(data.atStartOfDay(), data.atTime(LocalTime.MAX));
+	    } else {
+	        return feedbackRepository.findAll();
+	    }
 	}
 }
