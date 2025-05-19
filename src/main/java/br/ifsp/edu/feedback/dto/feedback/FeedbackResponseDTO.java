@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import br.ifsp.edu.feedback.model.enumerations.FeedbackType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
+@Schema(description = "DTO de resposta para feedback")
 public class FeedbackResponseDTO {
     private Long id;
     private String content;

@@ -22,6 +22,13 @@ import br.ifsp.edu.feedback.dto.feedback.FeedbackResponseDTO;
 import br.ifsp.edu.feedback.model.UserAuthenticated;
 import br.ifsp.edu.feedback.model.enumerations.FeedbackType;
 import br.ifsp.edu.feedback.service.FeedbackService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -49,6 +56,15 @@ public class FeedbackController {
 	
 	
 	//HISTÓRIA DE USUÁRIO 5 - RETORNAR APENAS MEUS FEEDBACKS NÃO ANONIMOS
+	@Operation(
+		    summary = "Listar feedbacks não anônimos do usuário logado",
+		    description = "Retorna todos os feedbacks visíveis (não anônimos) enviados ao usuário autenticado.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "Feedbacks retornados com sucesso"),
+		    @ApiResponse(responseCode = "401", description = "Não autorizado")
+		})
 	@GetMapping("/me")
 	@PreAuthorize("hasRole('EMPLOYEE')")
 	public ResponseEntity<List<FeedbackResponseDTO>> returnMyFeedbacks(@AuthenticationPrincipal UserAuthenticated authentication) {
@@ -57,6 +73,18 @@ public class FeedbackController {
 	}
 	
 	//HISTÓRIA DE USUÁRIO 4 - ENVIAR FEEDBACK
+	@Operation(
+		    summary = "Enviar feedback",
+		    description = "Permite que um funcionário envie um feedback.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "Feedback criado com sucesso",
+		        content = @Content(mediaType = "application/json", schema = @Schema(implementation = FeedbackResponseDTO.class))),
+		    @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+		    @ApiResponse(responseCode = "401", description = "Não autorizado")
+		})
+	@SecurityRequirement(name = "bearerAuth")
 	@PostMapping
 	@PreAuthorize("hasRole('EMPLOYEE')")
 	public ResponseEntity<FeedbackResponseDTO> createFeedback(
@@ -71,18 +99,36 @@ public class FeedbackController {
 	
 	//HISTÓRIA DE USUÁRIO 7 -  visualizar todos os feedbacks enviados, com filtros por setor e data 
 	//HISTÓRIA DE USUÁRIO 9 - gerar relatórios com base nos feedbacks recebidos por período e setor
+	@Operation(
+		    summary = "Listar feedbacks com filtros",
+		    description = "Lista todos os feedbacks com filtros opcionais por setor, data inicial e data final.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "Feedbacks filtrados retornados com sucesso"),
+		    @ApiResponse(responseCode = "401", description = "Não autorizado")
+		})
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/filter")
-	public ResponseEntity<List<FeedbackResponseDTO>> filterFeedbacks(
-	        @RequestParam(required = false) String setor,
-	        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFinal){
+		public ResponseEntity<List<FeedbackResponseDTO>> filterFeedbacks(
+				@Parameter(description = "Nome do setor") @RequestParam(required = false) String setor,
+				@Parameter(description = "Data inicial (formato: yyyy-MM-dd)") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+				@Parameter(description = "Data final (formato: yyyy-MM-dd)") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFinal) {
 
-	    List<FeedbackResponseDTO> response = feedbackService.getFilteredFeedbacks(setor, data, dataFinal);
-	    return ResponseEntity.ok(response);
-	}
+			List<FeedbackResponseDTO> response = feedbackService.getFilteredFeedbacks(setor, data, dataFinal);
+			return ResponseEntity.ok(response);
+		}
 	
 	//HISTÓRIA DE USUÁRIO 3 -  acesso ao conteúdo de todos os feedbacks enviados
+	@Operation(
+		    summary = "Listar todos os feedbacks",
+		    description = "Retorna todos os feedbacks enviados. Acesso restrito a administradores.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "Lista de feedbacks retornada com sucesso"),
+		    @ApiResponse(responseCode = "401", description = "Não autorizado")
+		})
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping()
 	public ResponseEntity<List<FeedbackResponseDTO>> getAllFeedbacksAdmin() {
@@ -91,6 +137,16 @@ public class FeedbackController {
 	}
 	
 	//HISTÓRIA DE USUÁRIO 8 - excluir feedbacks 
+	@Operation(
+		    summary = "Excluir feedback",
+		    description = "Exclui um feedback com base no ID. Acesso restrito a administradores.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "204", description = "Feedback excluído com sucesso"),
+		    @ApiResponse(responseCode = "403", description = "Não autorizado"),
+		    @ApiResponse(responseCode = "401", description = "Feedback não encontrado")
+		})
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteFeedbackById(@PathVariable("id") Long feedbackId) {
@@ -99,6 +155,15 @@ public class FeedbackController {
 	}
 	
 	//HISTÓRIA DE USUÁRIO 11 - agrupar por tipo
+	@Operation(
+		    summary = "Agrupar feedbacks por tipo",
+		    description = "Agrupa os feedbacks com base no tipo (Elogio, Crítica, Sugestão, etc). Acesso restrito a administradores.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "Feedbacks agrupados por tipo retornados com sucesso"),
+		    @ApiResponse(responseCode = "401", description = "Não autorizado")
+		})
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/grouped-by-type")
 	public ResponseEntity<Map<FeedbackType, List<FeedbackResponseDTO>>>groupFeedbacksByType(){

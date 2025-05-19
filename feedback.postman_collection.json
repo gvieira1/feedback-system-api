@@ -83,7 +83,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"testuser\",\r\n    \"password\": \"ifsp@123\"\r\n}",
+					"raw": "{\r\n    \"username\": \"testuser2\",\r\n    \"password\": \"\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,14 +107,14 @@
 			"response": []
 		},
 		{
-			"name": "Get my feedbacks",
+			"name": "Get all feedbacks Admin",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHkiLCJzdWIiOiJlbXBsb3llZXRlc3QyIiwiZXhwIjoxNzQ3NjA2NjkwLCJpYXQiOjE3NDc2MDMwOTAsInVzZXJJZCI6M30.b6z_gkuwxHbkJEpMlXwq5gsEOLT_zNKxcrfHv7Lo_f3_dSPbUSEO_ar2iBGNA8e6t9a5vpd39JfqKQAeynmgthB7Uf5eye_zLrloTtpqimH_Qeg5zx45yMAnKaXqmk06zTTUnWtoLC1L2yGB7R2gOcB4bDRcMW7xlNafad6U63fsbl5Fet-NT76BYqOOFm2iV7jhKjbiqpdcTgQ3yzkqfBdiXJmgrb9lLFPpH5zfpqMLVr4QSk4gzBIDn_hOt5YTMF4i5oGB4crmjbBXtk62NtCAqHzqG7NGaStujFv19GGzDErGRNoi2SW6pwOld72EsoM4E4wUUM1h33hGtPikuA",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHkiLCJzdWIiOiJ0ZXN0dXNlcjIiLCJleHAiOjE3NDc2Mjk4ODksImlhdCI6MTc0NzYyNjI4OSwidXNlcklkIjo0fQ.dT2-OnNAl2_kUGfgAOS2k8JWabYjykXb-eShEHGQs75YtguqY9CNd1BUbOVVJN6y2cifq4SqiXuGK70PtuB3vFmVIsEaIiJKifg06LvwRAeS2SKtDgKOOkoQtpTtZUc6CH_SXoWcIDLP42bDoqUGf8DS-m_ELVG64_gnLpHtZt6c99r9s7G0SF0Giy6pkWtvsH9ZIWpXVgZ4i2q7r5TxABw3X2rR6Umu-kULjCMrpoGJrDxItHdL6HA6ZHmPLkGH4AGC6NBBpwgNpt174Y8PKMYK7I_QAV4ddrThYVcU7eWASFPwy3t4Rw6nelT695VktuRCxz5LsOyEYZQ51iMW6w",
 							"type": "string"
 						}
 					]
@@ -396,6 +396,44 @@
 						"api",
 						"feedback",
 						"grouped-by-type"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get feedbacks user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHkiLCJzdWIiOiJ0ZXN0dXNlcjIiLCJleHAiOjE3NDc2MjI1ODYsImlhdCI6MTc0NzYxODk4NiwidXNlcklkIjo0fQ.fNTtZwo5NLBm206xh3jLSFODs-wWeTXjvMeCuyB-D1iEg89MQdOI8fk5pTsTW21iaPARyCG5PKftT36xUBIsJMVmpLzb3RSlmaWY3NkbzGVe0op_GBlZ3xJ1SKJ6zR24KIVejZ43vc13SKZPVoWRa11UD6Y9mwFlD5liN1W2UTfo6t6zWzBTN8Lh5WLDdBr68vyNFgrX2I4TwODyx8QMtkx9OfrM1HFuvJksZg2CK-gm-jH5-7iCIwFpzuVYG1FvWSaVEu5Lt9l_bxBisQU_dgWIqC3OEVdffKq9WsbG2HVUPfIlG4yjTXhMT2bigQxaTIKgqirN7unIpTicKWhJZQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"testuser\",\r\n    \"password\": \"ifsp@123\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/feedback/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"feedback",
+						"me"
 					]
 				}
 			},

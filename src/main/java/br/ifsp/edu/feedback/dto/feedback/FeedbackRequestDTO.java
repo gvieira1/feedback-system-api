@@ -3,11 +3,13 @@ package br.ifsp.edu.feedback.dto.feedback;
 import java.util.List;
 
 import br.ifsp.edu.feedback.model.enumerations.FeedbackType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@Schema(description = "DTO de requisição para envio de feedback")
 public class FeedbackRequestDTO {
     @NotBlank(message = "Content is required")
     private String content;

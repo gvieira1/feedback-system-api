@@ -1,6 +1,7 @@
 package br.ifsp.edu.feedback.dto.authentication;
 
 import br.ifsp.edu.feedback.model.enumerations.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+@Schema(description = "DTO de requisição para registro de usuário")
 public class UserRegistrationDTO {
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
