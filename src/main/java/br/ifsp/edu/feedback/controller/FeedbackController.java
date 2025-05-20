@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackRequestDTO;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackResponseDTO;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackSectorStatsDTO;
+import br.ifsp.edu.feedback.dto.feedback.FeedbackStatsDTO;
 import br.ifsp.edu.feedback.model.UserAuthenticated;
 import br.ifsp.edu.feedback.model.enumerations.FeedbackType;
 import br.ifsp.edu.feedback.service.FeedbackService;
@@ -143,6 +144,23 @@ public class FeedbackController {
 		        @RequestParam(defaultValue = "3") int limit) {
 		    List<FeedbackSectorStatsDTO> topSectors = feedbackService.getTopSectorsWithMostFeedbacks(limit);
 		    return ResponseEntity.ok(topSectors);
+		}
+	
+	//HISTÓRIA DE USUÁRIO 9.2 - gerar relatórios (contagem de feedbacks nos ulitmos 3 meses, contagem tipo com mais feedbacks, setor com mais feedbacks + contagem)
+	@Operation(
+		    summary = "Estatísticas dos feedbacks (últimos 3 meses)",
+		    description = "Retorna total de feedbacks, setor mais ativo e tipo de feedback mais comum nos últimos 3 meses.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "Estatísticas retornadas com sucesso"),
+		    @ApiResponse(responseCode = "401", description = "Não autorizado")
+		})
+		@PreAuthorize("hasRole('ADMIN')")
+		@GetMapping("/stats/last-three-months")
+		public ResponseEntity<FeedbackStatsDTO> getLastThreeMonthsStats() {
+		    FeedbackStatsDTO stats = feedbackService.getLastThreeMonthsStats();
+		    return ResponseEntity.ok(stats);
 		}
 	
 	//HISTÓRIA DE USUÁRIO 3 -  acesso ao conteúdo de todos os feedbacks enviados

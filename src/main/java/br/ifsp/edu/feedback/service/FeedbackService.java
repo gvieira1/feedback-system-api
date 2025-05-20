@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackRequestDTO;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackResponseDTO;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackSectorStatsDTO;
+import br.ifsp.edu.feedback.dto.feedback.FeedbackStatsDTO;
 import br.ifsp.edu.feedback.exception.ResourceNotFoundException;
 import br.ifsp.edu.feedback.model.Feedback;
 import br.ifsp.edu.feedback.model.User;
@@ -145,7 +146,40 @@ public class FeedbackService {
 	        .map(entry -> new FeedbackSectorStatsDTO(entry.getKey(), entry.getValue()))
 	        .toList();
 	}
+	
+	//ESTATISTICAS DOS ULTIMOS 3 MESES
+	public FeedbackStatsDTO getLastThreeMonthsStats() {
+	    LocalDateTime threeMonthsAgo = LocalDateTime.now().minusMonths(3);
+	    List<Feedback> recentFeedbacks = feedbackRepository.findByCreatedAtBetween(threeMonthsAgo, LocalDateTime.now());
 
+	    long total = recentFeedbacks.size();
+
+	    Map<String, Long> porSetor = recentFeedbacks.stream()
+	            .collect(Collectors.groupingBy(Feedback::getSector, Collectors.counting()));
+	    
+	    String setorMais = porSetor.entrySet().stream()
+	            .max(Map.Entry.comparingByValue())
+	            .map(Map.Entry::getKey).orElse(null);
+
+	    long quantidadeSetorMais = porSetor.getOrDefault(setorMais, 0L);
+
+	    Map<FeedbackType, Long> porTipo = recentFeedbacks.stream()
+	            .collect(Collectors.groupingBy(Feedback::getType, Collectors.counting()));
+
+	    FeedbackType tipoMais = porTipo.entrySet().stream()
+	            .max(Map.Entry.comparingByValue())
+	            .map(Map.Entry::getKey).orElse(null);
+
+	    long quantidadeTipoMais = porTipo.getOrDefault(tipoMais, 0L);
+
+	    return new FeedbackStatsDTO(
+	            total,
+	            setorMais,
+	            quantidadeSetorMais,
+	            tipoMais,
+	            quantidadeTipoMais
+	    );
+	}
 	
 	//EXPORTA FEEDBACKS PARA .CSV
 	public ByteArrayInputStream exportFeedbacksToCSV() {
