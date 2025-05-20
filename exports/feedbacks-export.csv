@@ -1,8 +1,8 @@
-ID,Conteúdo,Setor,Tipo,Anônimo,Data de Criação,Tags,Autor
-1,"Gostei muito da nova ferramenta.","TI","ELOGIO",false,"2025-05-17T23:16:25.590385","ferramenta;feedback positivo","employeetest"
-2,"Luz do banheiro quebrada","TI","RECLAMACAO",false,"2025-05-17T23:20:16.649427","ferramenta;feedback positivo","employeetest"
-3,"Muito dinâmico!","TI","ELOGIO",false,"2025-05-18T00:06:51.957634","ferramenta;feedback positivo","employeetest"
-4,"O setor trabalha em harmonia!","Recursos Humanos","ELOGIO",false,"2025-05-18T00:09:36.042952","ferramenta;feedback positivo","employeetest"
-5,"Amamos fazer APIS!","Recursos Humanos","ELOGIO",false,"2025-05-18T18:18:57.244136","feedback positivo","employeetest2"
-6,"Odiamos fazer APIS!","Recursos Humanos","RECLAMACAO",true,"2025-05-18T18:20:07.925487","feedback negativo","Anônimo"
-7,"Amamos o professor!","Recursos Humanos","ELOGIO",true,"2025-05-19T20:22:37.802170","feedback positivo","Anônimo"
+ID,Título,Conteúdo,Setor,Tipo,Anônimo,Data de Criação,Tags,Autor
+1,"","Odiamos fazer APIS!","Recursos Humanos","RECLAMACAO",true,"2025-05-18T20:18:19.382902","feedback negativo","Anônimo"
+2,"","amamos github!","Contabilidade","ELOGIO",false,"2025-05-18T20:19:03.701835","feedback positivo","employeetest2"
+4,"Feedback do hater","Odiamos verde!","RH","RECLAMACAO",true,"2025-05-20T13:55:33.277494","feedback negativo","Anônimo"
+5,"Feedback feliz","Amamos segundas feiras!","TI","ELOGIO",false,"2025-05-20T13:56:08.755200","feedback positivo","employeetest2"
+6,"Feedback mais ou menos","Amamos terças feiras mais ou menos!","Contabilidade","ELOGIO",false,"2025-05-20T13:57:16.562414","feedback mais ou menos","employeetest2"
+7,"ótimo refeitório","Melhor almoço da vida!","Refeitório","ELOGIO",false,"2025-05-20T14:52:47.786913","alimentação","employeetest4"
+8,"salas bem cuidadas","limpeza nos mínimos detalhes!","Auditório","SUGESTAO",false,"2025-05-20T14:53:41.229959","ambiente","employeetest4"

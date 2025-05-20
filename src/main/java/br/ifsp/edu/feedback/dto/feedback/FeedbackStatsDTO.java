@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedbackStatsDTO {
-    private long totalFeedbacks;
-    private String setorMaisFeedbacks;
-    private long quantidadeSetorMaisFeedbacks;
-    private FeedbackType tipoMaisFrequente;
-    private long quantidadeTipoMaisFrequente;
+	private long totalFeedbacks;
+	private String topSector;
+	private long topSectorCount;
+	private FeedbackType mostFrequentType;
+	private long mostFrequentTypeCount;
 }

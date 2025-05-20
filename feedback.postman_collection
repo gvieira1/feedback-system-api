@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "faf4418c-bf5d-4ce3-8c9f-7e4e0db0174f",
-		"name": "feedback",
+		"_postman_id": "c412bf75-f229-46d2-bd4c-7535a5758dd9",
+		"name": "feedback Copy 2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "43573707",
-		"_collection_link": "https://miranda-8250784.postman.co/workspace/Miranda's-Workspace~422bb9d1-11af-4b16-8eb4-5db361ff8ccc/collection/43573707-faf4418c-bf5d-4ce3-8c9f-7e4e0db0174f?action=share&source=collection_link&creator=43573707"
+		"_exporter_id": "39990146"
 	},
 	"item": [
 		{
@@ -501,7 +500,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHkiLCJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc0NzcxNTQxNSwiaWF0IjoxNzQ3NzExODE1LCJ1c2VySWQiOjF9.yTRzXwz3f69IuZUoMG2gAo9TEpt2hveIpIZe_MrU2Vrnhn3s9_lhA0CweYcQAYV2-VzzvS6suoa6zUzqKeM8NCaUPjqGyFxPnXlVrqW8SdjosKRA2nCq8qqgc8oG348YtP4PsS7DHlv01qV10meaudk6EG7UVBJ8bubK1M-cyVXZAO8SG8q2qOaQpf3SzEVm-SDPC3cujTx7IYZlRrPFLwZhvspQc0Vhcl8BJiSL5nG1p1QDh-cIO91dqwJj0hq6Yq1PcLtqdzwp_ScMnhfWUkvyS0rRkJefR2w_i7gVmbJjmjput7c91HM5A_IfS0NbebKG6eGuAJe94TKIw7dXfQ",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHkiLCJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc0Nzc2NzMyMSwiaWF0IjoxNzQ3NzYzNzIxLCJ1c2VySWQiOjF9.OOkRbTOegrt1VD0-5ZY3Gl_kevMrBF6pkhZnO3BcyuosPdvoHzF8plml7w2BTGaLGnpZxrtW6Cn2aNRmBJAIjph6hdskPuvvG9xXDTjeJQ1_q_MqjWw38npXibtd0O3P8OUfIUX7GFgUk21exutYrpqd-dKbQtrNsgH777gRTOAqI8e7VA0mLJi7wchk47PUTqEZMzV4Na9Ud67fC-UqegtDga7MwlE1BMpJAH_raAeGKkQ3W28wHJphxiEjTRbFe6cEpc4-6FmHrRkyg2tleB37Of3uJ5_olYEOIrQnUAYqaq6QPpRRoMF44QzLHoOMKPvpHb-WcWMc7yjzDWKxBg",
 							"type": "string"
 						}
 					]
@@ -509,7 +508,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/feedback/top-sectors?limit=3",
+					"raw": "http://localhost:8080/api/reports/top-sectors?limit=5",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -517,13 +516,13 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"feedback",
+						"reports",
 						"top-sectors"
 					],
 					"query": [
 						{
 							"key": "limit",
-							"value": "3"
+							"value": "5"
 						}
 					]
 				}
@@ -569,6 +568,37 @@
 						"feedback",
 						"stats",
 						"last-three-months"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get dashboard data",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHkiLCJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc0Nzc2NzMyMSwiaWF0IjoxNzQ3NzYzNzIxLCJ1c2VySWQiOjF9.OOkRbTOegrt1VD0-5ZY3Gl_kevMrBF6pkhZnO3BcyuosPdvoHzF8plml7w2BTGaLGnpZxrtW6Cn2aNRmBJAIjph6hdskPuvvG9xXDTjeJQ1_q_MqjWw38npXibtd0O3P8OUfIUX7GFgUk21exutYrpqd-dKbQtrNsgH777gRTOAqI8e7VA0mLJi7wchk47PUTqEZMzV4Na9Ud67fC-UqegtDga7MwlE1BMpJAH_raAeGKkQ3W28wHJphxiEjTRbFe6cEpc4-6FmHrRkyg2tleB37Of3uJ5_olYEOIrQnUAYqaq6QPpRRoMF44QzLHoOMKPvpHb-WcWMc7yjzDWKxBg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/reports/dashboard",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"reports",
+						"dashboard"
 					]
 				}
 			},

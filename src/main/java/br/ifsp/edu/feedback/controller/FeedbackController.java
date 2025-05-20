@@ -1,13 +1,9 @@
 package br.ifsp.edu.feedback.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.ifsp.edu.feedback.dto.feedback.FeedbackRequestDTO;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackResponseDTO;
-import br.ifsp.edu.feedback.dto.feedback.FeedbackSectorStatsDTO;
-import br.ifsp.edu.feedback.dto.feedback.FeedbackStatsDTO;
 import br.ifsp.edu.feedback.model.UserAuthenticated;
 import br.ifsp.edu.feedback.model.enumerations.FeedbackType;
+import br.ifsp.edu.feedback.service.ExportService;
 import br.ifsp.edu.feedback.service.FeedbackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,6 +42,7 @@ import lombok.AllArgsConstructor;
 public class FeedbackController {
 	
 	private final FeedbackService feedbackService;
+	private final ExportService exportService;
 	
 	//MAPPINGS(EMPLOYEES)
 	
@@ -62,7 +58,6 @@ public class FeedbackController {
 	    return ResponseEntity.ok(responseDTOs);
 	}
 	FIM*/
-	
 	
 	//HISTÓRIA DE USUÁRIO 5 - RETORNAR APENAS MEUS FEEDBACKS NÃO ANONIMOS
 	@Operation(
@@ -126,42 +121,9 @@ public class FeedbackController {
 
 			List<FeedbackResponseDTO> response = feedbackService.getFilteredFeedbacks(setor, data, dataFinal);
 			return ResponseEntity.ok(response);
-		}
+	}
+
 	
-	//HISTÓRIA DE USUÁRIO 9.1 - gerar relatórios (contagem de feedbacks por setor, top x setores com mais feedbacks)
-	@Operation(
-		    summary = "Top setores com mais feedbacks",
-		    description = "Retorna os setores com maior número de feedbacks, limitado a um número específico.",
-		    security = @SecurityRequirement(name = "bearerAuth")
-		)
-		@ApiResponses(value = {
-		    @ApiResponse(responseCode = "200", description = "Setores retornados com sucesso"),
-		    @ApiResponse(responseCode = "401", description = "Não autorizado")
-		})
-		@PreAuthorize("hasRole('ADMIN')")
-		@GetMapping("/top-sectors")
-		public ResponseEntity<List<FeedbackSectorStatsDTO>> getTopSectors(
-		        @RequestParam(defaultValue = "3") int limit) {
-		    List<FeedbackSectorStatsDTO> topSectors = feedbackService.getTopSectorsWithMostFeedbacks(limit);
-		    return ResponseEntity.ok(topSectors);
-		}
-	
-	//HISTÓRIA DE USUÁRIO 9.2 - gerar relatórios (contagem de feedbacks nos ulitmos 3 meses, contagem tipo com mais feedbacks, setor com mais feedbacks + contagem)
-	@Operation(
-		    summary = "Estatísticas dos feedbacks (últimos 3 meses)",
-		    description = "Retorna total de feedbacks, setor mais ativo e tipo de feedback mais comum nos últimos 3 meses.",
-		    security = @SecurityRequirement(name = "bearerAuth")
-		)
-		@ApiResponses(value = {
-		    @ApiResponse(responseCode = "200", description = "Estatísticas retornadas com sucesso"),
-		    @ApiResponse(responseCode = "401", description = "Não autorizado")
-		})
-		@PreAuthorize("hasRole('ADMIN')")
-		@GetMapping("/stats/last-three-months")
-		public ResponseEntity<FeedbackStatsDTO> getLastThreeMonthsStats() {
-		    FeedbackStatsDTO stats = feedbackService.getLastThreeMonthsStats();
-		    return ResponseEntity.ok(stats);
-		}
 	
 	//HISTÓRIA DE USUÁRIO 3 -  acesso ao conteúdo de todos os feedbacks enviados
 	@Operation(
@@ -179,6 +141,7 @@ public class FeedbackController {
 	    List<FeedbackResponseDTO> response = feedbackService.getAllFeedbacks();
 	    return ResponseEntity.ok(response);
 	}
+	
 	
 	//HISTÓRIA DE USUÁRIO 8 - excluir feedbacks 
 	@Operation(
@@ -198,6 +161,7 @@ public class FeedbackController {
 		 return ResponseEntity.noContent().build();
 	}
 	
+	
 	//HISTÓRIA DE USUÁRIO 11 - agrupar por tipo
 	@Operation(
 		    summary = "Agrupar feedbacks por tipo",
@@ -215,6 +179,7 @@ public class FeedbackController {
 		return ResponseEntity.ok(grouped);
 	}
 	
+	
 	//HISTÓRIA DE USUÁRIO 10 - exportar feedbacks para .csv
 	@Operation(
 		    summary = "Exportar feedbacks para CSV",
@@ -228,19 +193,11 @@ public class FeedbackController {
 		@PreAuthorize("hasRole('ADMIN')")
 		@GetMapping("/export")
 		public ResponseEntity<String> exportFeedbacksToCSV() {
-		    ByteArrayInputStream csvStream = feedbackService.exportFeedbacksToCSV();
-		    try {
-		        Path exportPath = Paths.get("exports");
-		        if (!Files.exists(exportPath)) {
-		            Files.createDirectories(exportPath);
-		        }
-
-		        Path filePath = exportPath.resolve("feedbacks-export.csv");
-		        Files.write(filePath, csvStream.readAllBytes());
-
-		        return ResponseEntity.ok("Feedbacks exportados com sucesso para: " + filePath.toAbsolutePath());
-		    } catch (IOException e) {
-		        return ResponseEntity.internalServerError().body("Erro ao salvar o arquivo CSV.");
-		    }
+		 try {
+	            Path filePath = exportService.exportFeedbacksToCsvFile();
+	            return ResponseEntity.ok("Feedbacks exportados com sucesso para: " + filePath.toAbsolutePath());
+	        } catch (Exception e) {
+	            return ResponseEntity.internalServerError().body("Erro ao exportar feedbacks: " + e.getMessage());
+	        }
 		}
 }

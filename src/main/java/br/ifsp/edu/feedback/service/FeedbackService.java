@@ -1,8 +1,5 @@
 package br.ifsp.edu.feedback.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -14,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import br.ifsp.edu.feedback.dto.feedback.FeedbackRequestDTO;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackResponseDTO;
-import br.ifsp.edu.feedback.dto.feedback.FeedbackSectorStatsDTO;
-import br.ifsp.edu.feedback.dto.feedback.FeedbackStatsDTO;
 import br.ifsp.edu.feedback.exception.ResourceNotFoundException;
 import br.ifsp.edu.feedback.model.Feedback;
 import br.ifsp.edu.feedback.model.User;
@@ -42,6 +37,11 @@ public class FeedbackService {
 	    return feedbackRepository.findAll().stream()
 	            .map(this::toResponseDTO)
 	            .toList();
+	}
+	
+	//BUSCA LISTA SIMPLES DE FEEDBACKS
+	public List<Feedback> getAllFeedbacksInListFormat(){
+		return feedbackRepository.findAll();
 	}
 
 	//MONTA FEEDBACK E RETORNA DTO
@@ -134,84 +134,6 @@ public class FeedbackService {
 	            .collect(Collectors.groupingBy(FeedbackResponseDTO::getType));
 	}
 
-	//MOSTRA CONTAGEM DE FEEDBACKS POR SETOR
-	public List<FeedbackSectorStatsDTO> getTopSectorsWithMostFeedbacks(int limit) {
-	    List<Feedback> feedbacks = feedbackRepository.findAll();
 
-	    return feedbacks.stream()
-	        .collect(Collectors.groupingBy(Feedback::getSector, Collectors.counting()))
-	        .entrySet()
-	        .stream()
-	        .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-	        .limit(limit)
-	        .map(entry -> new FeedbackSectorStatsDTO(entry.getKey(), entry.getValue()))
-	        .toList();
-	}
 
-	//ESTATISTICAS DOS ULTIMOS 3 MESES
-	public FeedbackStatsDTO getLastThreeMonthsStats() {
-	    LocalDateTime threeMonthsAgo = LocalDateTime.now().minusMonths(3);
-	    List<Feedback> recentFeedbacks = feedbackRepository.findByCreatedAtBetween(threeMonthsAgo, LocalDateTime.now());
-
-	    long total = recentFeedbacks.size();
-
-	    Map<String, Long> porSetor = recentFeedbacks.stream()
-	            .collect(Collectors.groupingBy(Feedback::getSector, Collectors.counting()));
-
-	    String setorMais = porSetor.entrySet().stream()
-	            .max(Map.Entry.comparingByValue())
-	            .map(Map.Entry::getKey).orElse(null);
-
-	    long quantidadeSetorMais = porSetor.getOrDefault(setorMais, 0L);
-
-	    Map<FeedbackType, Long> porTipo = recentFeedbacks.stream()
-	            .collect(Collectors.groupingBy(Feedback::getType, Collectors.counting()));
-
-	    FeedbackType tipoMais = porTipo.entrySet().stream()
-	            .max(Map.Entry.comparingByValue())
-	            .map(Map.Entry::getKey).orElse(null);
-
-	    long quantidadeTipoMais = porTipo.getOrDefault(tipoMais, 0L);
-
-	    return new FeedbackStatsDTO(
-	            total,
-	            setorMais,
-	            quantidadeSetorMais,
-	            tipoMais,
-	            quantidadeTipoMais
-	    );
-	}
-
-	//EXPORTA FEEDBACKS PARA .CSV
-	public ByteArrayInputStream exportFeedbacksToCSV() {
-	    List<Feedback> feedbacks = feedbackRepository.findAll();
-
-	    ByteArrayOutputStream out = new ByteArrayOutputStream();
-	    try (PrintWriter writer = new PrintWriter(out)) {
-	        // Cabeçalho do CSV
-	        writer.println("ID,Título,Conteúdo,Setor,Tipo,Anônimo,Data de Criação,Tags,Autor");
-
-	        // Linhas com dados
-	        for (Feedback feedback : feedbacks) {
-	            writer.printf(
-	                "%d,\"%s\",\"%s\",\"%s\",\"%s\",%b,\"%s\",\"%s\",\"%s\"%n",
-	                feedback.getId(),
-	                feedback.getTitulo().replace("\"", "\"\""),
-	                feedback.getContent().replace("\"", "\"\""),
-	                feedback.getSector(),
-	                feedback.getType(),
-	                feedback.isAnonymous(),
-	                feedback.getCreatedAt(),
-	                String.join(";", feedback.getTags()),
-	                feedback.isAnonymous() ? "Anônimo" : feedback.getAuthor().getUsername()
-	            );
-	        }
-
-	        writer.flush();
-	        return new ByteArrayInputStream(out.toByteArray());
-
-	    } catch (Exception e) {
-	        throw new RuntimeException("Erro ao exportar CSV", e);
-	    }
-	}
 }
