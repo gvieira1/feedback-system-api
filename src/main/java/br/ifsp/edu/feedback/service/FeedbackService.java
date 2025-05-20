@@ -47,7 +47,7 @@ public class FeedbackService {
 	//MONTA FEEDBACK E RETORNA DTO
 	public FeedbackResponseDTO createFeedback(FeedbackRequestDTO dto, User author) {
 	    Feedback feedback = Feedback.builder()
-	            .titulo(dto.getTitulo()) // <- NOVO CAMPO
+	            .titulo(dto.getTitulo())
 	            .content(dto.getContent())
 	            .sector(dto.getSector())
 	            .type(dto.getType())
@@ -64,7 +64,7 @@ public class FeedbackService {
 	public FeedbackResponseDTO toResponseDTO(Feedback feedback) {
 	    return FeedbackResponseDTO.builder()
 	            .id(feedback.getId())
-	            .titulo(feedback.getTitulo()) // <- NOVO CAMPO
+	            .titulo(feedback.getTitulo())
 	            .content(feedback.getContent())
 	            .sector(feedback.getSector())
 	            .type(feedback.getType())
@@ -196,7 +196,7 @@ public class FeedbackService {
 	            writer.printf(
 	                "%d,\"%s\",\"%s\",\"%s\",\"%s\",%b,\"%s\",\"%s\",\"%s\"%n",
 	                feedback.getId(),
-	                feedback.getTitulo().replace("\"", "\"\""), // <- NOVO CAMPO
+	                feedback.getTitulo().replace("\"", "\"\""),
 	                feedback.getContent().replace("\"", "\"\""),
 	                feedback.getSector(),
 	                feedback.getType(),
