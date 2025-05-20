@@ -452,7 +452,7 @@
 			"response": []
 		},
 		{
-			"name": "Feedback count by sector, top x sectors",
+			"name": "Top x sectors by feedback count",
 			"request": {
 				"method": "GET",
 				"header": []
