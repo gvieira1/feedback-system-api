@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import br.ifsp.edu.feedback.dto.feedback.FeedbackRequestDTO;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackResponseDTO;
+import br.ifsp.edu.feedback.dto.feedback.FeedbackSectorStatsDTO;
 import br.ifsp.edu.feedback.exception.ResourceNotFoundException;
 import br.ifsp.edu.feedback.model.Feedback;
 import br.ifsp.edu.feedback.model.User;
@@ -130,6 +131,21 @@ public class FeedbackService {
 	            .map(this::toResponseDTO)
 	            .collect(Collectors.groupingBy(FeedbackResponseDTO::getType));
 	}
+	
+	//MOSTRA CONTAGEM DE FEEDBACKS POR SETOR
+	public List<FeedbackSectorStatsDTO> getTopSectorsWithMostFeedbacks(int limit) {
+	    List<Feedback> feedbacks = feedbackRepository.findAll();
+
+	    return feedbacks.stream()
+	        .collect(Collectors.groupingBy(Feedback::getSector, Collectors.counting()))
+	        .entrySet()
+	        .stream()
+	        .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+	        .limit(limit)
+	        .map(entry -> new FeedbackSectorStatsDTO(entry.getKey(), entry.getValue()))
+	        .toList();
+	}
+
 	
 	//EXPORTA FEEDBACKS PARA .CSV
 	public ByteArrayInputStream exportFeedbacksToCSV() {

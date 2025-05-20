@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.ifsp.edu.feedback.dto.feedback.FeedbackRequestDTO;
 import br.ifsp.edu.feedback.dto.feedback.FeedbackResponseDTO;
+import br.ifsp.edu.feedback.dto.feedback.FeedbackSectorStatsDTO;
 import br.ifsp.edu.feedback.model.UserAuthenticated;
 import br.ifsp.edu.feedback.model.enumerations.FeedbackType;
 import br.ifsp.edu.feedback.service.FeedbackService;
@@ -124,6 +125,24 @@ public class FeedbackController {
 
 			List<FeedbackResponseDTO> response = feedbackService.getFilteredFeedbacks(setor, data, dataFinal);
 			return ResponseEntity.ok(response);
+		}
+	
+	//HISTÓRIA DE USUÁRIO 9.1 - gerar relatórios (contagem de feedbacks por setor, top x setores com mais feedbacks)
+	@Operation(
+		    summary = "Top setores com mais feedbacks",
+		    description = "Retorna os setores com maior número de feedbacks, limitado a um número específico.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "Setores retornados com sucesso"),
+		    @ApiResponse(responseCode = "401", description = "Não autorizado")
+		})
+		@PreAuthorize("hasRole('ADMIN')")
+		@GetMapping("/top-sectors")
+		public ResponseEntity<List<FeedbackSectorStatsDTO>> getTopSectors(
+		        @RequestParam(defaultValue = "3") int limit) {
+		    List<FeedbackSectorStatsDTO> topSectors = feedbackService.getTopSectorsWithMostFeedbacks(limit);
+		    return ResponseEntity.ok(topSectors);
 		}
 	
 	//HISTÓRIA DE USUÁRIO 3 -  acesso ao conteúdo de todos os feedbacks enviados
