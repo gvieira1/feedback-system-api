@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "4def0bcb-295f-48d0-8a05-dabaae9ee74b",
-		"name": "feedback Copy",
+		"_postman_id": "faf4418c-bf5d-4ce3-8c9f-7e4e0db0174f",
+		"name": "feedback",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "39990146"
+		"_exporter_id": "43573707",
+		"_collection_link": "https://miranda-8250784.postman.co/workspace/Miranda's-Workspace~422bb9d1-11af-4b16-8eb4-5db361ff8ccc/collection/43573707-faf4418c-bf5d-4ce3-8c9f-7e4e0db0174f?action=share&source=collection_link&creator=43573707"
 	},
 	"item": [
 		{
@@ -321,15 +322,18 @@
 			"response": []
 		},
 		{
-			"name": "get all feedbacks admin",
+			"name": "Get all feedbacks admin",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": ""
+				}
 			},
 			"response": []
 		},
 		{
-			"name": "admin delete",
+			"name": "Admin feedback delete",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -364,7 +368,7 @@
 			"response": []
 		},
 		{
-			"name": "grouped-by-type",
+			"name": "Grouped-by-type",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -402,7 +406,7 @@
 			"response": []
 		},
 		{
-			"name": "get feedbacks user",
+			"name": "Get feedbacks user",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -436,6 +440,14 @@
 						"me"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Export feedbacks",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}

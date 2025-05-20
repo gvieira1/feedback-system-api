@@ -1,0 +1,8 @@
+ID,Conteúdo,Setor,Tipo,Anônimo,Data de Criação,Tags,Autor
+1,"Gostei muito da nova ferramenta.","TI","ELOGIO",false,"2025-05-17T23:16:25.590385","ferramenta;feedback positivo","employeetest"
+2,"Luz do banheiro quebrada","TI","RECLAMACAO",false,"2025-05-17T23:20:16.649427","ferramenta;feedback positivo","employeetest"
+3,"Muito dinâmico!","TI","ELOGIO",false,"2025-05-18T00:06:51.957634","ferramenta;feedback positivo","employeetest"
+4,"O setor trabalha em harmonia!","Recursos Humanos","ELOGIO",false,"2025-05-18T00:09:36.042952","ferramenta;feedback positivo","employeetest"
+5,"Amamos fazer APIS!","Recursos Humanos","ELOGIO",false,"2025-05-18T18:18:57.244136","feedback positivo","employeetest2"
+6,"Odiamos fazer APIS!","Recursos Humanos","RECLAMACAO",true,"2025-05-18T18:20:07.925487","feedback negativo","Anônimo"
+7,"Amamos o professor!","Recursos Humanos","ELOGIO",true,"2025-05-19T20:22:37.802170","feedback positivo","Anônimo"

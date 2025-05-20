@@ -1,8 +1,13 @@
 package br.ifsp.edu.feedback.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +36,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+
+
 
 @AllArgsConstructor
 @RestController
@@ -170,4 +177,33 @@ public class FeedbackController {
 		var grouped = feedbackService.getFeedbacksGroupedByType();
 		return ResponseEntity.ok(grouped);
 	}
+	
+	//HISTÓRIA DE USUÁRIO 10 - exportar feedbacks para .csv
+	@Operation(
+		    summary = "Exportar feedbacks para CSV",
+		    description = "Exporta todos os feedbacks para um arquivo CSV salvo na pasta 'exports'. Acesso restrito a administradores.",
+		    security = @SecurityRequirement(name = "bearerAuth")
+		)
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "Feedbacks exportados com sucesso"),
+		    @ApiResponse(responseCode = "401", description = "Não autorizado")
+		})
+		@PreAuthorize("hasRole('ADMIN')")
+		@GetMapping("/export")
+		public ResponseEntity<String> exportFeedbacksToCSV() {
+		    ByteArrayInputStream csvStream = feedbackService.exportFeedbacksToCSV();
+		    try {
+		        Path exportPath = Paths.get("exports");
+		        if (!Files.exists(exportPath)) {
+		            Files.createDirectories(exportPath);
+		        }
+
+		        Path filePath = exportPath.resolve("feedbacks-export.csv");
+		        Files.write(filePath, csvStream.readAllBytes());
+
+		        return ResponseEntity.ok("Feedbacks exportados com sucesso para: " + filePath.toAbsolutePath());
+		    } catch (IOException e) {
+		        return ResponseEntity.internalServerError().body("Erro ao salvar o arquivo CSV.");
+		    }
+		}
 }

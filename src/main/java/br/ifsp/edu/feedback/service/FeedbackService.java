@@ -1,5 +1,8 @@
 package br.ifsp.edu.feedback.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -127,6 +130,36 @@ public class FeedbackService {
 	            .map(this::toResponseDTO)
 	            .collect(Collectors.groupingBy(FeedbackResponseDTO::getType));
 	}
+	
+	//EXPORTA FEEDBACKS PARA .CSV
+	public ByteArrayInputStream exportFeedbacksToCSV() {
+	    List<Feedback> feedbacks = feedbackRepository.findAll();
 
+	    ByteArrayOutputStream out = new ByteArrayOutputStream();
+	    try (PrintWriter writer = new PrintWriter(out)) {
+	        // Cabeçalho do CSV
+	        writer.println("ID,Conteúdo,Setor,Tipo,Anônimo,Data de Criação,Tags,Autor");
 
+	        // Linhas com dados
+	        for (Feedback feedback : feedbacks) {
+	            writer.printf(
+	                "%d,\"%s\",\"%s\",\"%s\",%b,\"%s\",\"%s\",\"%s\"%n",
+	                feedback.getId(),
+	                feedback.getContent().replace("\"", "\"\""),
+	                feedback.getSector(),
+	                feedback.getType(),
+	                feedback.isAnonymous(),
+	                feedback.getCreatedAt(),
+	                String.join(";", feedback.getTags()),
+	                feedback.isAnonymous() ? "Anônimo" : feedback.getAuthor().getUsername()
+	            );
+	        }
+
+	        writer.flush();
+	        return new ByteArrayInputStream(out.toByteArray());
+
+	    } catch (Exception e) {
+	        throw new RuntimeException("Erro ao exportar CSV", e);
+	    }
+	}
 }
