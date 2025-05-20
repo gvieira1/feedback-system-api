@@ -11,6 +11,9 @@ import lombok.Data;
 @Data
 @Schema(description = "DTO de requisição para envio de feedback")
 public class FeedbackRequestDTO {
+	@NotBlank(message = "Title is required")
+	private String titulo;
+	
     @NotBlank(message = "Content is required")
     private String content;
 

@@ -13,6 +13,7 @@ import lombok.Data;
 @Schema(description = "DTO de resposta para feedback")
 public class FeedbackResponseDTO {
     private Long id;
+    private String titulo;
     private String content;
     private String sector;
     private FeedbackType type;

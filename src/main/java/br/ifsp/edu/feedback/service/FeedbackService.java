@@ -26,9 +26,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Service
 public class FeedbackService {
-	
+
 	private final FeedbackRepository feedbackRepository;
-	
+
 	//BUSCA FEEDBACKS NÂO ANONIMOS DO FUNCIONARIO E DEVOLVE DTO
 	public List<FeedbackResponseDTO> getNonAnonymousFeedbacksByUser(User user) {
 	    return feedbackRepository.findByAuthor(user).stream()
@@ -36,17 +36,18 @@ public class FeedbackService {
 	            .map(this::toResponseDTO)
 	            .toList();
 	}
-	
+
 	//BUSCA TODOS OS FEEDBACKS PARA O ADMIN E DEVOLVE DTO
 	public List<FeedbackResponseDTO> getAllFeedbacks() {
 	    return feedbackRepository.findAll().stream()
 	            .map(this::toResponseDTO)
 	            .toList();
 	}
-	
+
 	//MONTA FEEDBACK E RETORNA DTO
 	public FeedbackResponseDTO createFeedback(FeedbackRequestDTO dto, User author) {
 	    Feedback feedback = Feedback.builder()
+	            .titulo(dto.getTitulo()) // <- NOVO CAMPO
 	            .content(dto.getContent())
 	            .sector(dto.getSector())
 	            .type(dto.getType())
@@ -58,11 +59,12 @@ public class FeedbackService {
 	    Feedback savedFeedback = feedbackRepository.save(feedback);
 	    return toResponseDTO(savedFeedback);
 	}
-	
+
 	//CONVERTE PARA DTO
 	public FeedbackResponseDTO toResponseDTO(Feedback feedback) {
 	    return FeedbackResponseDTO.builder()
 	            .id(feedback.getId())
+	            .titulo(feedback.getTitulo()) // <- NOVO CAMPO
 	            .content(feedback.getContent())
 	            .sector(feedback.getSector())
 	            .type(feedback.getType())
@@ -72,7 +74,7 @@ public class FeedbackService {
 	            .authorName(feedback.isAnonymous() ? null : feedback.getAuthor().getUsername())
 	            .build();
 	}
-	
+
 	//RESPONDE CONTROLLER E DEVOLVE DTO
 	public List<FeedbackResponseDTO> getFilteredFeedbacks(String setor, LocalDate data, LocalDate dataFinal) {
 	    List<Feedback> feedbacks = findFeedbacks(setor, data, dataFinal);
@@ -108,7 +110,6 @@ public class FeedbackService {
 	    return feedbackRepository.findAll();
 	}
 
-
 	//FUNÇOES AUXILIARES DE DATA
 	private LocalDateTime startOfDay(LocalDate date) {
 	    return date.atStartOfDay();
@@ -117,14 +118,14 @@ public class FeedbackService {
 	private LocalDateTime endOfDay(LocalDate date) {
 	    return date.atTime(LocalTime.MAX);
 	}
-	
+
 	//DELETA FEEDBACK POR ID
 	public void deleteFeedback(Long feedbackId) {
 		Feedback existingFeedback = feedbackRepository.findById(feedbackId)
-				.orElseThrow( () -> new ResourceNotFoundException("Feedback não encontrado!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Feedback não encontrado!"));
 		feedbackRepository.delete(existingFeedback);
 	}
-	
+
 	//RETORNA LISTA DE FEEDBACKS AGRUPADOS POR TIPO 
 	public Map<FeedbackType, List<FeedbackResponseDTO>> getFeedbacksGroupedByType() {
 	    List<Feedback> feedbacks = feedbackRepository.findAll();
@@ -132,7 +133,7 @@ public class FeedbackService {
 	            .map(this::toResponseDTO)
 	            .collect(Collectors.groupingBy(FeedbackResponseDTO::getType));
 	}
-	
+
 	//MOSTRA CONTAGEM DE FEEDBACKS POR SETOR
 	public List<FeedbackSectorStatsDTO> getTopSectorsWithMostFeedbacks(int limit) {
 	    List<Feedback> feedbacks = feedbackRepository.findAll();
@@ -146,7 +147,7 @@ public class FeedbackService {
 	        .map(entry -> new FeedbackSectorStatsDTO(entry.getKey(), entry.getValue()))
 	        .toList();
 	}
-	
+
 	//ESTATISTICAS DOS ULTIMOS 3 MESES
 	public FeedbackStatsDTO getLastThreeMonthsStats() {
 	    LocalDateTime threeMonthsAgo = LocalDateTime.now().minusMonths(3);
@@ -156,7 +157,7 @@ public class FeedbackService {
 
 	    Map<String, Long> porSetor = recentFeedbacks.stream()
 	            .collect(Collectors.groupingBy(Feedback::getSector, Collectors.counting()));
-	    
+
 	    String setorMais = porSetor.entrySet().stream()
 	            .max(Map.Entry.comparingByValue())
 	            .map(Map.Entry::getKey).orElse(null);
@@ -180,7 +181,7 @@ public class FeedbackService {
 	            quantidadeTipoMais
 	    );
 	}
-	
+
 	//EXPORTA FEEDBACKS PARA .CSV
 	public ByteArrayInputStream exportFeedbacksToCSV() {
 	    List<Feedback> feedbacks = feedbackRepository.findAll();
@@ -188,13 +189,14 @@ public class FeedbackService {
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 	    try (PrintWriter writer = new PrintWriter(out)) {
 	        // Cabeçalho do CSV
-	        writer.println("ID,Conteúdo,Setor,Tipo,Anônimo,Data de Criação,Tags,Autor");
+	        writer.println("ID,Título,Conteúdo,Setor,Tipo,Anônimo,Data de Criação,Tags,Autor");
 
 	        // Linhas com dados
 	        for (Feedback feedback : feedbacks) {
 	            writer.printf(
-	                "%d,\"%s\",\"%s\",\"%s\",%b,\"%s\",\"%s\",\"%s\"%n",
+	                "%d,\"%s\",\"%s\",\"%s\",\"%s\",%b,\"%s\",\"%s\",\"%s\"%n",
 	                feedback.getId(),
+	                feedback.getTitulo().replace("\"", "\"\""), // <- NOVO CAMPO
 	                feedback.getContent().replace("\"", "\"\""),
 	                feedback.getSector(),
 	                feedback.getType(),
