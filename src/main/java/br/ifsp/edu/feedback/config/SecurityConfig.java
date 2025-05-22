@@ -30,54 +30,58 @@ import br.ifsp.edu.feedback.security.CustomJwtAuthenticationConverter;
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
-    
+
     @Value("${jwt.public.key}")
     private RSAPublicKey key;
+
     @Value("${jwt.private.key}")
     private RSAPrivateKey priv;
-    
+
     @Bean
     CustomJwtAuthenticationConverter customJwtAuthenticationConverter() {
         return new CustomJwtAuthenticationConverter();
     }
-    
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, CustomJwtAuthenticationConverter customJwtAuthenticationConverter) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/users/register").permitAll()
-                .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
-                    ).permitAll()
-                .anyRequest().authenticated())
-                .oauth2ResourceServer(
-                        conf -> conf.jwt(jwt -> jwt.jwtAuthenticationConverter(customJwtAuthenticationConverter)))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/users/public-register").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(conf ->
+                conf.jwt(jwt ->
+                    jwt.jwtAuthenticationConverter(customJwtAuthenticationConverter)
+                )
+            )
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            );
+
         return http.build();
     }
-    
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
     JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(this.key).build();
     }
-    
+
     @Bean
     JwtEncoder jwtEncoder() {
         var jwk = new RSAKey.Builder(this.key).privateKey(this.priv).build();
         var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
-    
+
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 }

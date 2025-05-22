@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ifsp.edu.feedback.dto.authentication.UserRegistrationDTO;
 import br.ifsp.edu.feedback.dto.user.UserDTO;
 import br.ifsp.edu.feedback.model.User;
+import br.ifsp.edu.feedback.model.enumerations.Role;
 import br.ifsp.edu.feedback.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,11 +29,31 @@ public class UserController {
         this.userService = userService;
     }
 
-	@Operation(summary = "Registrar novo usuário", description = "Cria novo usuário no banco de dados")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Usuário criado com sucesso"),
-			@ApiResponse(responseCode = "400", description = "Dados inválidos") })
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody UserRegistrationDTO userDto) {
+    @Operation(summary = "Registro público de usuário", description = "Permite que qualquer pessoa se registre como funcionário (EMPLOYEE)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuário criado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos")
+    })
+    @PostMapping("/public-register")
+    public ResponseEntity<User> publicRegister(@RequestBody UserRegistrationDTO userDto) {
+    	userDto.setRole(Role.EMPLOYEE);
+        User user = userService.registerUser(userDto);
+        return ResponseEntity.ok(user);
+    }
+
+    @Operation(
+        summary = "Registrar novo usuário (admin)",
+        description = "Permite que um administrador crie novos usuários com qualquer role.",
+        security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuário criado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+        @ApiResponse(responseCode = "403", description = "Acesso negado – apenas administradores")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin-register")
+    public ResponseEntity<User> adminRegister(@RequestBody UserRegistrationDTO userDto) {
         User user = userService.registerUser(userDto);
         return ResponseEntity.ok(user);
     }
