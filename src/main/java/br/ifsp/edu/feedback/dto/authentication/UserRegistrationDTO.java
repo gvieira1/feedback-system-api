@@ -6,7 +6,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -29,7 +28,6 @@ public class UserRegistrationDTO {
     @NotBlank(message = "Password confirmation is required")
     private String passwordConfirmation;
 
-    @NotNull(message = "Role could not be null")
     @Enumerated(EnumType.STRING)
     private Role role;
 }

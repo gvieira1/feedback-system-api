@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
@@ -35,7 +36,7 @@ public class UserController {
         @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
     @PostMapping("/public-register")
-    public ResponseEntity<User> publicRegister(@RequestBody UserRegistrationDTO userDto) {
+    public ResponseEntity<User> publicRegister(@RequestBody @Valid UserRegistrationDTO userDto) {
     	userDto.setRole(Role.EMPLOYEE);
         User user = userService.registerUser(userDto);
         return ResponseEntity.ok(user);
