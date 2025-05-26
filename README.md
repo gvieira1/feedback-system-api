@@ -10,7 +10,6 @@ Esta API tem como objetivo facilitar o envio e gestão de feedbacks dentro de um
 **Público-alvo:** Funcionários e administradores (RH) de empresas que desejam fomentar a comunicação interna e obter insights sobre o clima organizacional.
 
 ---
-
 ## ✅ Funcionalidades Implementadas
 
 As funcionalidades foram desenvolvidas com base nas seguintes histórias de usuário:
@@ -30,7 +29,6 @@ As funcionalidades foram desenvolvidas com base nas seguintes histórias de usu�
 11. Agrupamento de feedbacks por tipo (elogio, sugestão, crítica, reclamação).
 
 ---
-
 ## ⚙️ Instruções de Execução Local
 
 ### 🔧 Pré-requisitos
@@ -61,7 +59,6 @@ mvn spring-boot:run
 A aplicação será iniciada em: `http://localhost:8080`
 
 ---
-
 ## 🔐 Como Obter o Token JWT
 
 1. Cadastre um novo employee em uma requisição `POST` para `api/users/public-register`
@@ -76,7 +73,6 @@ Authorization: Bearer <token>
 > A autenticação utiliza Spring Security com assinatura JWT baseada em chave pública e privada (RSA).
 
 ---
-
 ## 🧩 Modelo de Dados e Regras de Validação
 
 ### Entidades Principais
@@ -99,7 +95,6 @@ Authorization: Bearer <token>
 - Feedbacks anônimos ocultam o nome do autor.
     
 ---
-
 ## 🛡️ Autenticação e Autorização
 
 - **Autenticação:** JWT com chave pública e privada.
@@ -134,7 +129,6 @@ Authorization: Bearer <token>
     - Exportação (CSV).
     - Relatórios: top setores, últimos três meses, dashboard.
         
-
 ### 🔍 Testes Unitários
 
 - **FeedbackService:**
@@ -158,7 +152,6 @@ Acesse a documentação interativa da API em:
 http://localhost:8080/swagger-ui.html
 ```
 
-
 ### 🧪 Postman
 
 1. Importe a collection Postman (arquivo `postman_collection.json`).
@@ -168,10 +161,8 @@ http://localhost:8080/swagger-ui.html
 3. Teste todos os endpoints disponíveis: autenticação, envio de feedback, filtros e relatórios.
     
 ---
-
 ## 🚀 Deploy
 
 > Em construção...
-
 
 ---
