@@ -46,19 +46,6 @@ public class FeedbackController {
 	
 	//MAPPINGS(EMPLOYEES)
 	
-	//Retornar meus feedbacks inclusive anônimos.
-	/*
-	@GetMapping
-	@PreAuthorize("hasRole('EMPLOYEE')")
-	public ResponseEntity<List<FeedbackResponseDTO>> returnMyFeedbacks(@AuthenticationPrincipal UserAuthenticated authentication){
-	    List<Feedback> feedbacks = feedbackService.getMyFeedbacks(authentication.getUser());
-	    List<FeedbackResponseDTO> responseDTOs = feedbacks.stream()
-	        .map(feedbackService::toResponseDTO)
-	        .toList();
-	    return ResponseEntity.ok(responseDTOs);
-	}
-	FIM*/
-	
 	//HISTÓRIA DE USUÁRIO 5 - RETORNAR APENAS MEUS FEEDBACKS NÃO ANONIMOS
 	@Operation(
 		    summary = "Listar feedbacks não anônimos do usuário logado",
