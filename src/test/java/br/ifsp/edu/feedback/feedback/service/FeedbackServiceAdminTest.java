@@ -1,4 +1,4 @@
-package br.ifsp.edu.feedback.unit;
+package br.ifsp.edu.feedback.feedback.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,7 +25,7 @@ import br.ifsp.edu.feedback.repository.FeedbackRepository;
 import br.ifsp.edu.feedback.service.FeedbackService;
 
 @ExtendWith(MockitoExtension.class)
-class FeedbackUnitTest {
+class FeedbackServiceAdminTest {
 
 	@Mock 
 	private FeedbackRepository feedbackRepository;
