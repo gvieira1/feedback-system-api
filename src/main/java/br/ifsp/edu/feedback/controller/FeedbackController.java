@@ -1,12 +1,19 @@
 package br.ifsp.edu.feedback.controller;
-
+import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -187,4 +194,20 @@ public class FeedbackController {
 	            return ResponseEntity.internalServerError().body("Erro ao exportar feedbacks: " + e.getMessage());
 	        }
 		}
+	
+	@GetMapping("/export/download")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Resource> downloadFeedbackCsv() throws IOException {
+	    Path filePath = Paths.get("exports/feedbacks-export.csv");
+	    Resource resource = new UrlResource(filePath.toUri());
+
+	    if (!resource.exists()) {
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    return ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=feedbacks-export.csv")
+	        .contentType(MediaType.parseMediaType("text/csv"))
+	        .body(resource);
+	}
 }
